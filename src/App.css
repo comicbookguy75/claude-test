@@ -1,0 +1,571 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: #005EB8;
+  color: white;
+  padding: 0 20px;
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px 0 0 0;
+}
+
+.header h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.header h1 span {
+  display: inline-block;
+  background: white;
+  color: #005EB8;
+  font-weight: 900;
+  padding: 2px 8px;
+  margin-right: 10px;
+  border-radius: 2px;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 0;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.nav-tab {
+  padding: 10px 22px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+  border-bottom: 4px solid transparent;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.nav-tab:hover {
+  color: white;
+  background: rgba(255,255,255,0.1);
+}
+
+.nav-tab.active {
+  color: white;
+  border-bottom: 4px solid white;
+  background: rgba(255,255,255,0.15);
+}
+
+.main-content {
+  flex: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 28px 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.card h2 {
+  font-size: 1.2rem;
+  color: #003087;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #41B6E6;
+}
+
+.card h3 {
+  font-size: 1rem;
+  color: #003087;
+  margin-bottom: 12px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #212b32;
+  margin-bottom: 6px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #aeb7bd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: #212b32;
+  background: white;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #005EB8;
+  box-shadow: 0 0 0 3px rgba(0,94,184,0.2);
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.form-row .form-group {
+  flex: 1;
+  min-width: 120px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background: #005EB8;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #003087;
+}
+
+.btn-primary:disabled {
+  background: #aeb7bd;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: #f0f4f5;
+  color: #212b32;
+  border: 2px solid #aeb7bd;
+}
+
+.btn-secondary:hover {
+  background: #e8edee;
+}
+
+.btn-danger {
+  background: #da291c;
+  color: white;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.btn-danger:hover {
+  background: #b01c11;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.btn-edit {
+  background: #41B6E6;
+  color: white;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.btn-edit:hover {
+  background: #1d9fc9;
+}
+
+.medication-card {
+  background: #f0f4f5;
+  border-left: 4px solid #005EB8;
+  border-radius: 4px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.medication-card-info h4 {
+  font-size: 1rem;
+  color: #003087;
+  margin-bottom: 4px;
+}
+
+.medication-card-info p {
+  font-size: 0.85rem;
+  color: #425563;
+}
+
+.medication-card-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.symptom-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.symptom-chip {
+  background: #e8edee;
+  border: 2px solid #aeb7bd;
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #212b32;
+  font-weight: 500;
+}
+
+.symptom-chip:hover {
+  background: #41B6E6;
+  color: white;
+  border-color: #41B6E6;
+}
+
+.symptom-chip.added {
+  background: #007f3b;
+  color: white;
+  border-color: #007f3b;
+}
+
+.symptom-item {
+  background: #f0f4f5;
+  border-left: 4px solid #41B6E6;
+  border-radius: 4px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.symptom-item-info {
+  flex: 1;
+}
+
+.symptom-item-info h4 {
+  font-size: 0.95rem;
+  color: #003087;
+}
+
+.symptom-item-info p {
+  font-size: 0.82rem;
+  color: #425563;
+  margin-top: 2px;
+}
+
+.severity-display {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.severity-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #aeb7bd;
+}
+
+.severity-dot.active {
+  background: #005EB8;
+}
+
+.analysis-result-card {
+  border-radius: 4px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.analysis-result-header {
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.analysis-result-body {
+  background: white;
+  padding: 18px;
+}
+
+.likelihood-badge {
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: white;
+}
+
+.likelihood-high {
+  background: #da291c;
+}
+
+.likelihood-medium {
+  background: #d5680b;
+}
+
+.likelihood-low {
+  background: #007f3b;
+}
+
+.match-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 14px 0;
+}
+
+.match-list li {
+  padding: 5px 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #f0f4f5;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.match-list li:last-child {
+  border-bottom: none;
+}
+
+.match-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.match-common { background: #da291c; }
+.match-uncommon { background: #d5680b; }
+.match-rare { background: #007f3b; }
+.match-interaction { background: #7C2855; }
+
+.info-box {
+  background: #E8EDEE;
+  border-left: 4px solid #005EB8;
+  padding: 12px 14px;
+  border-radius: 0 4px 4px 0;
+  margin-top: 12px;
+  font-size: 0.9rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #425563;
+}
+
+.empty-state p {
+  margin-bottom: 8px;
+}
+
+.progress-bar-wrap {
+  background: #e8edee;
+  border-radius: 4px;
+  height: 8px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: #005EB8;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 32px 20px;
+  color: #425563;
+}
+
+.spinner {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  border: 4px solid #e8edee;
+  border-top-color: #005EB8;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.autocomplete-wrap {
+  position: relative;
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 2px solid #005EB8;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  list-style: none;
+}
+
+.autocomplete-list li {
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #f0f4f5;
+}
+
+.autocomplete-list li:hover {
+  background: #f0f4f5;
+}
+
+.autocomplete-list li:last-child {
+  border-bottom: none;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 6px 10px;
+  border: 2px solid #aeb7bd;
+  border-radius: 4px;
+  user-select: none;
+}
+
+.checkbox-label:hover {
+  border-color: #005EB8;
+}
+
+.checkbox-label input {
+  width: auto;
+  cursor: pointer;
+}
+
+.checkbox-label.checked {
+  background: #005EB8;
+  color: white;
+  border-color: #005EB8;
+}
+
+.section-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #425563;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.tag {
+  display: inline-block;
+  background: #e8edee;
+  color: #425563;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.tag-blue {
+  background: #005EB8;
+  color: white;
+}
+
+.tag-green {
+  background: #007f3b;
+  color: white;
+}
+
+.no-api-key-banner {
+  background: #fff9c4;
+  border: 2px solid #d5680b;
+  border-radius: 4px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.no-api-key-banner strong {
+  color: #d5680b;
+}
+
+.interaction-warning {
+  background: #fde8e6;
+  border-left: 4px solid #da291c;
+  padding: 10px 14px;
+  border-radius: 0 4px 4px 0;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+  .header h1 {
+    font-size: 1.1rem;
+  }
+  .nav-tab {
+    padding: 10px 14px;
+    font-size: 0.875rem;
+  }
+  .main-content {
+    padding: 16px 12px;
+  }
+  .card {
+    padding: 16px;
+  }
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}

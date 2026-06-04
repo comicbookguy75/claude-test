@@ -1,0 +1,28 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Frutiger', Arial, sans-serif;
+  background-color: #f0f4f5;
+  color: #212b32;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+input, select, textarea, button {
+  font-family: inherit;
+}
+
+a {
+  color: #005EB8;
+}
+
+* {
+  transition: none;
+}
