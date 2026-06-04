@@ -8,7 +8,7 @@ function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2)
 }
 
-export default function MedicationForm({ onAdd, apiKey, editingMed, onEditDone }) {
+export default function MedicationForm({ onAdd, editingMed, onEditDone }) {
   const isEditing = !!editingMed
 
   const [name, setName] = useState(editingMed?.name || '')
@@ -20,8 +20,6 @@ export default function MedicationForm({ onAdd, apiKey, editingMed, onEditDone }
   const [slug, setSlug] = useState(editingMed?.slug || '')
 
   const [searchResults, setSearchResults] = useState([])
-  const [searching, setSearching] = useState(false)
-  const [searchError, setSearchError] = useState('')
   const [showDropdown, setShowDropdown] = useState(false)
 
   const searchTimeout = useRef(null)
@@ -57,27 +55,17 @@ export default function MedicationForm({ onAdd, apiKey, editingMed, onEditDone }
     setSlug('')
 
     clearTimeout(searchTimeout.current)
-    if (val.length < 2 || !apiKey) {
+    if (val.length < 2) {
       setSearchResults([])
       setShowDropdown(false)
       return
     }
 
-    searchTimeout.current = setTimeout(async () => {
-      setSearching(true)
-      setSearchError('')
-      try {
-        const results = await searchMedicine(val, apiKey)
-        setSearchResults(results)
-        setShowDropdown(results.length > 0)
-      } catch (err) {
-        setSearchError('Could not search NHS API: ' + err.message)
-        setSearchResults([])
-        setShowDropdown(false)
-      } finally {
-        setSearching(false)
-      }
-    }, 400)
+    searchTimeout.current = setTimeout(() => {
+      const results = searchMedicine(val)
+      setSearchResults(results)
+      setShowDropdown(results.length > 0)
+    }, 200)
   }
 
   function handleSelectResult(result) {
@@ -141,17 +129,6 @@ export default function MedicationForm({ onAdd, apiKey, editingMed, onEditDone }
             required
             autoComplete="off"
           />
-          {!apiKey && (
-            <p style={{ fontSize: '0.78rem', color: '#425563', marginTop: '4px' }}>
-              Add an NHS API key in Settings to enable drug name search
-            </p>
-          )}
-          {searching && (
-            <p style={{ fontSize: '0.78rem', color: '#005EB8', marginTop: '4px' }}>Searching NHS medicines...</p>
-          )}
-          {searchError && (
-            <p style={{ fontSize: '0.78rem', color: '#da291c', marginTop: '4px' }}>{searchError}</p>
-          )}
           {showDropdown && searchResults.length > 0 && (
             <ul className="autocomplete-list">
               {searchResults.map((r, i) => (

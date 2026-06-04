@@ -1,65 +1,30 @@
 import { useState, useCallback } from 'react'
-import { getMedicineDetails, extractSideEffects, extractInteractions } from '../services/nhsApi'
+import { getMedicineData, extractSideEffects, extractInteractions } from '../services/nhsApi'
 import { runAnalysis, getAdvice } from '../services/analysisEngine'
 import Disclaimer from './Disclaimer'
 
-export default function AnalysisResults({ medications, symptoms, apiKey }) {
-  const [loading, setLoading] = useState(false)
-  const [progress, setProgress] = useState({ current: 0, total: 0, label: '' })
+export default function AnalysisResults({ medications, symptoms }) {
   const [results, setResults] = useState(null)
-  const [fetchErrors, setFetchErrors] = useState([])
   const [hasRun, setHasRun] = useState(false)
 
-  const runAnalysisHandler = useCallback(async () => {
+  const runAnalysisHandler = useCallback(() => {
     if (!medications.length || !symptoms.length) return
 
-    setLoading(true)
-    setResults(null)
-    setFetchErrors([])
     setHasRun(true)
 
-    const errors = []
     const medicineDataMap = {}
 
-    setProgress({ current: 0, total: medications.length, label: 'Fetching NHS medicine data...' })
-
-    for (let i = 0; i < medications.length; i++) {
-      const med = medications[i]
-      setProgress({ current: i + 1, total: medications.length, label: `Looking up ${med.name}...` })
-
-      if (!apiKey) {
-        medicineDataMap[med.id] = {
-          sideEffects: { common: [], uncommon: [], rare: [] },
-          interactions: [],
-          found: false,
-        }
-        continue
-      }
-
-      try {
-        // If we have a slug from search autocomplete, use it; otherwise derive from name
-        const slug = med.slug || med.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-        const details = await getMedicineDetails(slug, apiKey)
-        const sideEffects = extractSideEffects(details)
-        const interactions = extractInteractions(details)
-        medicineDataMap[med.id] = { sideEffects, interactions, found: true }
-      } catch (err) {
-        errors.push({ medication: med.name, message: err.message })
-        medicineDataMap[med.id] = {
-          sideEffects: { common: [], uncommon: [], rare: [] },
-          interactions: [],
-          found: false,
-        }
-      }
+    for (const med of medications) {
+      const slug = med.slug || med.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+      const details = getMedicineData(slug)
+      const sideEffects = extractSideEffects(details)
+      const interactions = extractInteractions(details)
+      medicineDataMap[med.id] = { sideEffects, interactions, found: !!details }
     }
-
-    setFetchErrors(errors)
-    setProgress({ current: medications.length, total: medications.length, label: 'Running analysis...' })
 
     const analysisResults = runAnalysis(medications, symptoms, medicineDataMap)
     setResults(analysisResults)
-    setLoading(false)
-  }, [medications, symptoms, apiKey])
+  }, [medications, symptoms])
 
   if (!medications.length || !symptoms.length) {
     return (
@@ -78,13 +43,6 @@ export default function AnalysisResults({ medications, symptoms, apiKey }) {
     <div>
       <Disclaimer />
 
-      {!apiKey && (
-        <div className="no-api-key-banner">
-          <strong>⚠️ No NHS API key set.</strong> Analysis will run but cannot fetch official NHS side effect data.
-          Go to <strong>Settings</strong> to add your free NHS API key for accurate results.
-        </div>
-      )}
-
       <div className="card">
         <h2>Run Analysis</h2>
         <p style={{ color: '#425563', fontSize: '0.9rem', marginBottom: '16px' }}>
@@ -95,43 +53,13 @@ export default function AnalysisResults({ medications, symptoms, apiKey }) {
         <button
           className="btn btn-primary"
           onClick={runAnalysisHandler}
-          disabled={loading}
           style={{ fontSize: '1rem', padding: '12px 28px' }}
         >
-          {loading ? 'Analysing...' : hasRun ? '↺ Re-run Analysis' : '▶ Run Analysis'}
+          {hasRun ? '↺ Re-run Analysis' : '▶ Run Analysis'}
         </button>
-
-        {loading && (
-          <div className="loading-state" style={{ marginTop: '24px' }}>
-            <div className="spinner" />
-            <p style={{ fontWeight: '600', marginBottom: '8px' }}>{progress.label}</p>
-            <div className="progress-bar-wrap">
-              <div
-                className="progress-bar"
-                style={{ width: `${progress.total > 0 ? (progress.current / progress.total) * 100 : 0}%` }}
-              />
-            </div>
-            <p style={{ fontSize: '0.82rem' }}>{progress.current} of {progress.total} medications processed</p>
-          </div>
-        )}
       </div>
 
-      {!loading && fetchErrors.length > 0 && (
-        <div className="card" style={{ borderLeft: '4px solid #d5680b' }}>
-          <h3 style={{ color: '#d5680b', marginBottom: '10px' }}>⚠️ Some medications could not be looked up</h3>
-          {fetchErrors.map((err, i) => (
-            <p key={i} style={{ fontSize: '0.88rem', color: '#425563', marginBottom: '4px' }}>
-              <strong>{err.medication}:</strong> {err.message === 'No NHS API key provided'
-                ? 'No API key set — visit Settings to add one.'
-                : err.message.includes('404') || err.message.includes('not found')
-                  ? 'Not found in NHS medicines database.'
-                  : err.message}
-            </p>
-          ))}
-        </div>
-      )}
-
-      {!loading && results !== null && (
+      {results !== null && (
         <div>
           {results.length === 0 ? (
             <div className="card">
@@ -139,7 +67,7 @@ export default function AnalysisResults({ medications, symptoms, apiKey }) {
                 <p style={{ fontSize: '2rem', marginBottom: '8px' }}>✅</p>
                 <p style={{ fontWeight: '600', marginBottom: '8px' }}>No matches found</p>
                 <p>
-                  No known side effects matching your symptoms were found in the NHS data.
+                  No known side effects matching your symptoms were found in the medication database.
                   This does not mean your medications are not causing your symptoms — always consult your GP or pharmacist.
                 </p>
               </div>
@@ -191,7 +119,7 @@ function ResultCard({ result }) {
           </div>
           <div style={{ fontSize: '0.82rem', color: '#425563', marginTop: '3px' }}>
             {result.matchedSymptoms.length} symptom match{result.matchedSymptoms.length !== 1 ? 'es' : ''}
-            {result.notFound && ' · Not found in NHS database'}
+            {result.notFound && ' · Not found in database'}
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -214,14 +142,14 @@ function ResultCard({ result }) {
               fontSize: '0.88rem',
               color: '#425563',
             }}>
-              ℹ️ This medicine was not found in the NHS medicines database. Side effects could not be checked automatically.
+              ℹ️ This medicine was not found in the built-in database. Side effects could not be checked automatically.
               Check the NHS website or speak to your pharmacist for information about side effects.
             </div>
           )}
 
           {result.matchedSymptoms.length === 0 && !result.notFound && (
             <p style={{ color: '#425563', fontSize: '0.9rem', marginBottom: '14px' }}>
-              No direct symptom matches found in NHS data for this medicine.
+              No direct symptom matches found in the database for this medicine.
             </p>
           )}
 
